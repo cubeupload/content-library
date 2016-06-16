@@ -1,0 +1,21 @@
+{
+    "name": "cubeupload/content-library",
+    "description": "A file-level deduplicated content storage system",
+    "type": "lib",
+    "autoload":
+    {
+        "classmap":
+        [
+            "src/"
+        ]
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
+    "authors": [
+        {
+            "name": "Tom Dicks",
+            "email": "tom@cubeupload.com"
+        }
+    ]
+}
