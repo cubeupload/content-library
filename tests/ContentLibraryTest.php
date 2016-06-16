@@ -63,4 +63,11 @@
 
             $this->assertTrue( self::$library->exists( $sampleHash ) );
         }
+
+        public function testFileNotExists()
+        {
+            $fakehash = "12345";
+
+            $this->assertFalse( self::$library->exists( $fakehash ) );
+        }
     }
