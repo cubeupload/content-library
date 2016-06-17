@@ -1,33 +1,40 @@
 <?php namespace CubeUpload\ContentLibrary;
 
-//use League\Flysystem;
+use League\Flysystem\Filesystem;
 
 class Library
 {
     private $baseDir;
     private $defaultPermission = 0755;
+    private $filesystem;
 
-    public function __construct( $baseDir = '.' )
+    public function __construct( Filesystem $filesystem, $baseDir = '.' )
     {
+        $this->setFilesystem( $filesystem );
         $this->setBaseDir( $baseDir );
+    }
+    
+    public function setFilesystem( $filesystem )
+    {
+        $this->filesystem = $filesystem;
     }
 
     public function setBaseDir( $baseDir )
     {
         $testFile = rand() . ".dat";
 
-        if( file_exists( $baseDir ) )
+        if( $this->filesystem->write( $baseDir . '/' . $testFile, "test" ) )
         {
-            if( touch( $baseDir . '/' . $testFile ) )
-            {
-                unlink( $baseDir . '/' . $testFile );
-                $this->baseDir = $baseDir;
-            }
-            else
-                throw new \Exception( "Base directory {$baseDir} exists but no permission to write" ); 
+            $this->filesystem->delete( $baseDir . '/' . $testFile );
+            $this->baseDir = $baseDir;
         }
         else
-            throw new \Exception( "Base directory {$baseDir} doesn't exist" );
+            throw new \Exception( "BaseDir {$baseDir} exists but no permission to write" ); 
+    }
+
+    public function getFilesystem()
+    {
+        return $this->filesystem;
     }
 
     public function getBaseDir()
@@ -60,14 +67,16 @@ class Library
         $hashPath = $this->getHashPath( $hash );
         $savePath = $this->getBaseDir() . '/' . $this->getSplit( $hash );
 
-        if( !file_exists( $savePath ) )
+        /*
+        if( !$this->filesystem->has( $savePath ) )
         {
             $oldumask = umask(0);
             mkdir( $savePath, $this->defaultPermission, true );
             umask( $oldumask );
         }
+        */
 
-        copy( $path, $hashPath );
+        $this->filesystem->write( $hashPath, file_get_contents($path) );
         return $hash;
     }
 
@@ -75,8 +84,8 @@ class Library
     {
         $hashPath = $this->getHashPath( $hash );
         
-        if( file_exists( $hashPath ) )
-            return file_get_contents( $hashPath );
+        if( $this->filesystem->has( $hashPath ) )
+            return $this->filesystem->read( $hashPath );
         else
             throw new \Exception( "File hash {$hash} not found in library" );
     }
@@ -85,7 +94,7 @@ class Library
     {
         $hashPath = $this->getHashPath( $hash );
         
-        if( file_exists( $hashPath ) )
+        if( $this->filesystem->has( $hashPath ) )
             return true;
         else
             return false;

@@ -1,6 +1,8 @@
 <?php
 
     use CubeUpload\ContentLibrary\Library;
+    use League\Flysystem\Filesystem;
+    use League\Flysystem\Memory\MemoryAdapter;
     use PHPUnit\Framework\TestCase;
     
     class ContentLibraryTest extends TestCase
@@ -12,14 +14,15 @@
 
         public static function setUpBeforeClass()
         {
-            mkdir( self::$libraryDir );
-            self::$library = new Library( self::$libraryDir );
+            //mkdir( self::$libraryDir );
+            $filesystem = new Filesystem( new MemoryAdapter() );
+            self::$library = new Library( $filesystem );
         }
 
         public static function tearDownAfterClass()
         {
             self::$library = null;
-            self::delTree( self::$libraryDir );
+            //self::delTree( self::$libraryDir );
         }
 
         // http://php.net/manual/en/function.rmdir.php#110489
@@ -62,7 +65,6 @@
             $testContent = file_get_contents( self::$testfile );
 
             $this->assertEquals( $libraryContent, $testContent );
-
         }
 
         public function testFileExists()
