@@ -11,15 +11,18 @@ Nice and easy...
 // Initialise the class, giving it an instance of a Flysystem\Filesystem to work with.
 $library = new CubeUpload\ContentLibrary\Library( $filesystem );
 
-// Feed the save() method a file path. The file will be copied to the library and the hash returned.
-$hash = $library->save( $filePath );
+// Feed the write() method a file path. The file will be copied to the library and the hash returned.
+$hash = $library->write( $filePath );
 // Save the resulting hash to a cache or database for later resolution
 
 // Load the content of a hashed file
-$content = $library->load( $hash );
+$content = $library->read( $hash );
 
 // Check if a hash exists in the library
-$exists = $library->exists( $hash );
+$exists = $library->has( $hash );
+
+// Delete the hash content in the library
+$library->delete( $hash );
 ```
 
 ## Notes
