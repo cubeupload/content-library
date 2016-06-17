@@ -12,7 +12,7 @@ class LibraryServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('cube_library', function ($app) {
-            return new Library($app['config']['cubeupload.library.base_dir']);
+            return new Library();
         });
     }
 

@@ -7,14 +7,20 @@ class Library
     private $defaultPermission = 0755;
     private $filesystem;
 
-    public function __construct( Filesystem $filesystem )
+    public function __construct( Filesystem $filesystem = null)
     {
-        $this->setFilesystem( $filesystem );
+        if( $filesystem != null)
+            $this->setFilesystem( $filesystem );
     }
     
     public function setFilesystem( $filesystem )
     {
         $this->filesystem = $filesystem;
+    }
+
+    public function getFilesystem()
+    {
+        return $this->filesystem;
     }
 
     private function getHashPath( $string )
