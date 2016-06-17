@@ -41,12 +41,13 @@ class Library
     public function write( $path )
     {
 		if( !file_exists( $path ) )
-			throw new \Exception( "File {$path} doesn't exist" );
+			throw new \Exception( "Source file {$path} doesn't exist" );
 		
         $hash = $this->makeHashFromFile( $path );
         $hashPath = $this->getHashPath( $hash );
 
-        $this->filesystem->write( $hashPath, file_get_contents($path) );
+        if( !$this->has( $hash ) )
+            $this->filesystem->write( $hashPath, file_get_contents($path) );
         return $hash;
     }
 

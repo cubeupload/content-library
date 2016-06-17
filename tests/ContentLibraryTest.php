@@ -64,6 +64,14 @@
         /*
          * @depends testSaveFile
          */
+        public function testSaveExistingFile()
+        {
+            $this->assertEquals( self::$library->write( self::$testfile ), self::$testhash );
+        }
+
+        /*
+         * @depends testSaveFile
+         */
         public function testDeleteFile()
         {
             self::$library->delete( self::$testhash );
