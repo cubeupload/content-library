@@ -24,10 +24,10 @@
         {          
             $fs = new FileSystem( new MemoryAdapter () );
             $lib = new Library( $fs );
-            $lib->save( self::$testfile );
+            $lib->write( self::$testfile );
             
-            $this->assertTrue( $lib->exists( self::$testhash ));
-            $this->assertEquals( self::$testcontent, $lib->load( self::$testhash ));
+            $this->assertTrue( $lib->has( self::$testhash ));
+            $this->assertEquals( self::$testcontent, $lib->read( self::$testhash ));
         }
         
         public function testLocalAdapter()
@@ -36,10 +36,10 @@
             $fs = new Filesystem( new Local(self::$libraryDir) );
             
             $lib = new Library( $fs );
-            $lib->save( self::$testfile );
+            $lib->write( self::$testfile );
             
-            $this->assertTrue( $lib->exists( self::$testhash ));
-            $this->assertEquals( self::$testcontent, $lib->load( self::$testhash ));
+            $this->assertTrue( $lib->has( self::$testhash ));
+            $this->assertEquals( self::$testcontent, $lib->read( self::$testhash ));
             deltree( self::$libraryDir );
         }
     }

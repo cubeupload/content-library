@@ -32,7 +32,7 @@ class Library
         return md5_file( $path );
     }
 
-    public function save( $path )
+    public function write( $path )
     {
 		if( !file_exists( $path ) )
 			throw new \Exception( "File {$path} doesn't exist" );
@@ -44,7 +44,7 @@ class Library
         return $hash;
     }
 
-    public function load( $hash )
+    public function read( $hash )
     {
         $hashPath = $this->getHashPath( $hash );
         
@@ -54,7 +54,7 @@ class Library
             throw new \Exception( "File hash {$hash} not found in library" );
     }
 
-    public function exists( $hash )
+    public function has( $hash )
     {
         $hashPath = $this->getHashPath( $hash );
         

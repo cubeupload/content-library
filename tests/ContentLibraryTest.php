@@ -33,7 +33,7 @@
         {
             $sampleHash = md5_file( self::$testfile );
 
-            $generatedHash = self::$library->save( self::$testfile );
+            $generatedHash = self::$library->write( self::$testfile );
 
             $this->assertEquals( $sampleHash, $generatedHash );
         }
@@ -45,7 +45,7 @@
         {
             $sampleHash = md5_file( self::$testfile );
 
-            $libraryContent = self::$library->load( $sampleHash );
+            $libraryContent = self::$library->read( $sampleHash );
             $testContent = file_get_contents( self::$testfile );
 
             $this->assertEquals( $libraryContent, $testContent );
@@ -58,7 +58,7 @@
         {
             $sampleHash = md5_file( self::$testfile );
 
-            $this->assertTrue( self::$library->exists( $sampleHash ) );
+            $this->assertTrue( self::$library->has( $sampleHash ) );
         }
 
         /*
@@ -68,14 +68,14 @@
         {
             self::$library->delete( self::$testhash );
 
-            $this->assertFalse( self::$library->exists( self::$testhash ) );
+            $this->assertFalse( self::$library->has( self::$testhash ) );
         }
 
         public function testFileNotExists()
         {
             $fakehash = "12345";
 
-            $this->assertFalse( self::$library->exists( $fakehash ) );
+            $this->assertFalse( self::$library->has( $fakehash ) );
         }
 
         /**
@@ -83,6 +83,6 @@
 		 */
 		public function testSaveInvalidFile()
 		{
-			self::$library->save( 'invalid_file' );
+			self::$library->write( 'invalid_file' );
 		}
     }
