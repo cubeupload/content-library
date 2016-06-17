@@ -9,6 +9,13 @@
             "src/"
         ]
     },
+    "autoload-dev":
+    {
+        "files":
+        [
+            "tests/common.php"
+        ]
+    },
     "require-dev": {
         "phpunit/phpunit": "*",
         "league/flysystem-memory": "*"

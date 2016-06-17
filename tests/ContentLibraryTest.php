@@ -6,33 +6,22 @@
     use PHPUnit\Framework\TestCase;
     
     class ContentLibraryTest extends TestCase
-    {     
-
+    {    
         private static $testfile = './tests/fixtures/testimage.jpg';
         private static $libraryDir = './tests/fixtures/content';
+        private static $testhash;
         private static $library;
 
         public static function setUpBeforeClass()
         {
-            //mkdir( self::$libraryDir );
             $filesystem = new Filesystem( new MemoryAdapter() );
             self::$library = new Library( $filesystem );
+            self::$testhash = md5_file( self::$testfile );
         }
 
         public static function tearDownAfterClass()
         {
             self::$library = null;
-            //self::delTree( self::$libraryDir );
-        }
-
-        // http://php.net/manual/en/function.rmdir.php#110489
-        public static function delTree($dir)
-        {
-            $files = array_diff(scandir($dir), array('.','..'));
-            foreach ($files as $file) {
-                (is_dir("$dir/$file")) ? self::delTree("$dir/$file") : unlink("$dir/$file");
-            }
-            return rmdir($dir); 
         }
 
         public function testClassExists()
@@ -48,15 +37,10 @@
 
             $this->assertEquals( $sampleHash, $generatedHash );
         }
-		
-		/**
-		 * @expectedException Exception
-		 */
-		public function testSaveInvalidFile()
-		{
-			self::$library->save( 'invalid_file' );
-		}
 
+        /*
+         * @depends testSaveFile
+         */
         public function testLoadFile()
         {
             $sampleHash = md5_file( self::$testfile );
@@ -67,11 +51,24 @@
             $this->assertEquals( $libraryContent, $testContent );
         }
 
+        /*
+         * @depends testSaveFile
+         */
         public function testFileExists()
         {
             $sampleHash = md5_file( self::$testfile );
 
             $this->assertTrue( self::$library->exists( $sampleHash ) );
+        }
+
+        /*
+         * @depends testSaveFile
+         */
+        public function testDeleteFile()
+        {
+            self::$library->delete( self::$testhash );
+
+            $this->assertFalse( self::$library->exists( self::$testhash ) );
         }
 
         public function testFileNotExists()
@@ -80,4 +77,12 @@
 
             $this->assertFalse( self::$library->exists( $fakehash ) );
         }
+
+        /**
+		 * @expectedException Exception
+		 */
+		public function testSaveInvalidFile()
+		{
+			self::$library->save( 'invalid_file' );
+		}
     }

@@ -63,4 +63,14 @@ class Library
         else
             return false;
     }
+
+    public function delete( $hash )
+    {
+        $hashPath = $this->getHashPath( $hash );
+
+        if( $this->filesystem->has( $hashPath ))
+            $this->filesystem->delete( $hashPath );
+        else
+            throw new \Exception( "Hash {$hash} wasn't found" );
+    }
 }

@@ -6,10 +6,9 @@
     use League\Flysystem\Filesystem;
     use League\Flysystem\Memory\MemoryAdapter;
     use League\Flysystem\Adapter\Local;
-    
+
     class AdaptersTest extends TestCase
-    {
-        private static $testfile = './tests/fixtures/testimage.jpg';
+    {                                                                                                                                                                                                           private static $testfile = './tests/fixtures/testimage.jpg';
         private static $testhash;
         private static $testcontent;
         private static $libraryDir = './tests/fixtures/content';
@@ -18,17 +17,7 @@
         public static function setUpBeforeClass()
         {
             self::$testhash = md5_file( self::$testfile );
-            self::$testcontent = file_get_contents( self::$testfile );
-        }
-        
-        // http://php.net/manual/en/function.rmdir.php#110489
-        public static function delTree($dir)
-        {
-            $files = array_diff(scandir($dir), array('.','..'));
-            foreach ($files as $file) {
-                (is_dir("$dir/$file")) ? self::delTree("$dir/$file") : unlink("$dir/$file");
-            }
-            return rmdir($dir); 
+            self::$testcontent = file_get_contents( self::$testfile );          
         }
 
         public function testMemoryAdapter()
@@ -51,6 +40,6 @@
             
             $this->assertTrue( $lib->exists( self::$testhash ));
             $this->assertEquals( self::$testcontent, $lib->load( self::$testhash ));
-            self::delTree( self::$libraryDir );
+            deltree( self::$libraryDir );
         }
     }
