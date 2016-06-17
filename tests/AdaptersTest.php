@@ -43,7 +43,7 @@
         
         public function testLocalAdapter()
         {
-            //mkdir( self::$libraryDir );
+            mkdir( self::$libraryDir );
             $fs = new Filesystem( new Local(self::$libraryDir) );
             
             $lib = new Library( $fs );

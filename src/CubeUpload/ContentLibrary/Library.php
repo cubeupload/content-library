@@ -4,14 +4,12 @@ use League\Flysystem\Filesystem;
 
 class Library
 {
-    private $baseDir;
     private $defaultPermission = 0755;
     private $filesystem;
 
-    public function __construct( Filesystem $filesystem, $baseDir = '.' )
+    public function __construct( Filesystem $filesystem )
     {
         $this->setFilesystem( $filesystem );
-        $this->setBaseDir( $baseDir );
     }
     
     public function setFilesystem( $filesystem )
@@ -19,32 +17,9 @@ class Library
         $this->filesystem = $filesystem;
     }
 
-    public function setBaseDir( $baseDir )
-    {
-        $testFile = rand() . ".dat";
-
-        if( $this->filesystem->write( $baseDir . '/' . $testFile, "test" ) )
-        {
-            $this->filesystem->delete( $baseDir . '/' . $testFile );
-            $this->baseDir = $baseDir;
-        }
-        else
-            throw new \Exception( "BaseDir {$baseDir} exists but no permission to write" ); 
-    }
-
-    public function getFilesystem()
-    {
-        return $this->filesystem;
-    }
-
-    public function getBaseDir()
-    {
-        return $this->baseDir;
-    }
-
     private function getHashPath( $string )
     {
-        return $this->baseDir . "/" . $this->getSplit( $string ) . "/" . "{$string}.dat";
+        return "/" . $this->getSplit( $string ) . "/" . "{$string}.dat";
     }
 
     private function getSplit( $string )
@@ -63,18 +38,7 @@ class Library
 			throw new \Exception( "File {$path} doesn't exist" );
 		
         $hash = $this->makeHashFromFile( $path );
-
         $hashPath = $this->getHashPath( $hash );
-        $savePath = $this->getBaseDir() . '/' . $this->getSplit( $hash );
-
-        /*
-        if( !$this->filesystem->has( $savePath ) )
-        {
-            $oldumask = umask(0);
-            mkdir( $savePath, $this->defaultPermission, true );
-            umask( $oldumask );
-        }
-        */
 
         $this->filesystem->write( $hashPath, file_get_contents($path) );
         return $hash;
