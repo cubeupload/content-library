@@ -8,8 +8,8 @@ We store a *lot* of images on cubeupload and it gets messy on the filesystem. Wi
 Nice and easy...
 
 ```php
-// Initialise the class, using /content as our library base directory.
-$library = new CubeUpload\ContentLibrary\Library( '/content' );
+// Initialise the class, giving it an instance of a Flysystem\Filesystem to work with.
+$library = new CubeUpload\ContentLibrary\Library( $filesystem );
 
 // Feed the save() method a file path. The file will be copied to the library and the hash returned.
 $hash = $library->save( $filePath );
