@@ -45,6 +45,14 @@
 
             $this->assertEquals( $sampleHash, $generatedHash );
         }
+		
+		/**
+		 * @expectedException Exception
+		 */
+		public function testSaveInvalidFile()
+		{
+			self::$library->save( 'invalid_file' );
+		}
 
         public function testLoadFile()
         {

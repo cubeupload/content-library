@@ -52,6 +52,9 @@ class Library
 
     public function save( $path )
     {
+		if( !file_exists( $path ) )
+			throw new \Exception( "File {$path} doesn't exist" );
+		
         $hash = $this->makeHashFromFile( $path );
 
         $hashPath = $this->getHashPath( $hash );
@@ -63,7 +66,6 @@ class Library
             mkdir( $savePath, $this->defaultPermission, true );
             umask( $oldumask );
         }
-
 
         copy( $path, $hashPath );
         return $hash;
